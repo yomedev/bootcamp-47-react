@@ -1,6 +1,6 @@
 import { Counter } from './components/Counter';
 import { Header, Layout } from './components/Layout';
-// import { Banner } from './components/Banner';
+import { Banner } from './components/Banner';
 // import { UsersList } from './components/Users';
 
 export const App = () => {
@@ -14,3 +14,9 @@ export const App = () => {
     </Layout>
   );
 };
+
+// const counter = new Counter()
+
+// counter.render()
+
+

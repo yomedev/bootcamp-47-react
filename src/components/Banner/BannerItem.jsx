@@ -1,6 +1,6 @@
 import { PropTypes } from 'prop-types';
 
-export const BannerItem = ({ title, text, children }) => {
+export const BannerItem = ({ title, text, children, onModalOpen }) => {
   return (
     <div className="feature col">
       <div
@@ -15,7 +15,7 @@ export const BannerItem = ({ title, text, children }) => {
         <p>{text}</p>
       </div>
 
-      <button type="button" className="btn btn-primary">
+      <button type="button" className="btn btn-primary" onClick={onModalOpen}>
         Call to action
       </button>
     </div>
@@ -26,5 +26,4 @@ BannerItem.propTypes = {
   title: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
-  onClick: PropTypes.func,
 };
