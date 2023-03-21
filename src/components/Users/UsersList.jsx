@@ -1,12 +1,10 @@
-import usersJson from '../../data/users.json';
-
 import { UsersItem } from './UsersItem';
 
-export const UsersList = () => {
+export const UsersList = ({users}) => {
   return (
     <div className="mb-5">
 
-      {usersJson.map(user => (
+      {users.map(user => (
         <UsersItem key={user.id} user={user} />
       ))}
     </div>

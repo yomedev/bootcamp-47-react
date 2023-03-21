@@ -1,22 +1,20 @@
-import { Counter } from './components/Counter';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
+
 import { Header, Layout } from './components/Layout';
-import { Banner } from './components/Banner';
-// import { UsersList } from './components/Users';
+// import { LoginForm } from './components/LoginForm';
+import { Users } from './components/Users';
+import { UsersList } from './components/Users/UsersList';
 
 export const App = () => {
   return (
     <Layout>
       <Header title="Hello world!" />
-
-      <Counter />
-      {/* <Banner /> */}
-      {/* <UsersList /> */}
+      {/* <LoginForm /> */}
+      <Users />
+      <ToastContainer />
     </Layout>
   );
 };
-
-// const counter = new Counter()
-
-// counter.render()
 
 
