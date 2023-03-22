@@ -1,92 +1,92 @@
 import { Component } from "react";
-import { UsersFilters } from "./UsersFilters";
+import { FiPlus } from "react-icons/fi";
+import { FaBeer } from 'react-icons/fa';
+import { AvailabilityFilter, SearchInput, SkillsFilter } from "./UsersFilters";
 import { UsersList } from "./UsersList";
+import { Spinner } from "../Spinner";
+
 import usersJson from "../../data/users.json";
+import { Button } from "../Button/Button";
+
+const ALL_SKILLS_VALUE = "all";
 
 export class Users extends Component {
   state = {
-    users: usersJson,
-    filters: {
-      isAvailableChecked: true,
-      skill: "",
-      search: "",
-    },
-    submitSearch: ''
+    users: [],
+    isLoading: false,
+    isAvailable: false,
+    skills: ALL_SKILLS_VALUE,
+    search: "",
+  };
+
+  handleChangeSkills = (event) => {
+    const { value } = event.target;
+    this.setState({ skills: value });
   };
 
   handleChangeAvailability = () => {
-    this.setState((prev) => ({
-      filters: {
-        ...prev.filters,
-        isAvailableChecked: !prev.filters.isAvailableChecked,
-      },
-    }));
-  };
-
-  handleChangeSkill = (event) => {
-    const { value } = event.target;
-    this.setState((prev) => ({
-      filters: {
-        ...prev.filters,
-        skill: value,
-      },
-    }));
+    this.setState((prevState) => ({ isAvailable: !prevState.isAvailable }));
   };
 
   handleChangeSearch = (event) => {
-    const { value } = event.target;
-    this.setState((prev) => ({
-      filters: {
-        ...prev.filters,
-        search: value,
-      },
-    }));
+    this.setState({ search: event.target.value });
   };
 
   handleResetSearch = () => {
-    this.setState((prev) => ({
-      filters: {
-        ...prev.filters,
-        search: "",
-      },
-    }));
+    this.setState({ search: "" });
   };
 
-  handleSubmitSearch = () => {
-    this.setState((prev) => ({
-      submitSearch: prev.filters.search
-    }));
+  applyFilters = () => {
+    const { users, search } = this.state;
+
+    return users.filter((user) =>
+      user.name.toLowerCase().includes(search.toLowerCase())
+    );
   };
 
-  getFilteredUser = () => {
-    const {users, submitSearch} = this.state
-    // const {search} = filters
-    return users.filter(user => user.name.toLowerCase().includes(submitSearch.toLowerCase()))
-  }
+  handleGetUsers = () => {
+    this.setState({ isLoading: true });
+    setTimeout(() => {
+      this.setState({ users: usersJson.slice(0, 2), isLoading: false });
+    }, 1000);
+  };
 
   render() {
-    const { filters } = this.state;
+    const { users, isAvailable, skills, search, isLoading } = this.state;
+
     return (
       <>
-        <UsersFilters
-          filters={filters}
-          onChangeAvailabiity={this.handleChangeAvailability}
-          onChangeSkill={this.handleChangeSkill}
-          onChangeSearch={this.handleChangeSearch}
+        <div className="d-flex align-items-center mb-5">
+          <AvailabilityFilter
+            isAvailable={isAvailable}
+            onChangeAvailability={this.handleChangeAvailability}
+          />
+          <SkillsFilter
+            skillValue={skills}
+            onChangeSkill={this.handleChangeSkills}
+          />
+          <button type="button" className="btn btn-primary btn-lg ms-auto">
+            <FiPlus />
+          </button>
+        </div>
+        <SearchInput
+          search={search}
           onResetSearch={this.handleResetSearch}
-          onSubmitSearch={this.handleSubmitSearch}
+          onChangeSearch={this.handleChangeSearch}
         />
-        <UsersList users={this.getFilteredUser()} />
+
+        {/* {!isLoading ? <button className="btn btn-primary" onClick={this.handleGetUsers}>Get users</button> : null}
+        {isLoading && <Spinner />} */}
+        {users?.length ? <UsersList users={users} /> : null}
+
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <Button test='test'>asdfasdfsdf<FaBeer /></Button>
+        )}
       </>
     );
   }
 }
 
-// export const Users = () => {
-//   return (
-//     <>
-//       <UsersFilters />
-//       <UsersList />
-//     </>
-//   );
-// };
+// Button({test: 'test', children: 'Get users'})

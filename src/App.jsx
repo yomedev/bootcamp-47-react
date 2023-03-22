@@ -4,7 +4,6 @@ import { ToastContainer } from 'react-toastify';
 import { Header, Layout } from './components/Layout';
 // import { LoginForm } from './components/LoginForm';
 import { Users } from './components/Users';
-import { UsersList } from './components/Users/UsersList';
 
 export const App = () => {
   return (

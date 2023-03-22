@@ -1,16 +1,5 @@
 [
   {
-    "id": 1,
-    "name": "Leanne Graham",
-    "email": "Sincere@april.biz",
-    "bio": "Assumenda harum mollitia neque, officiis veniam repellat sapiente delectus aspernatur",
-    "skills": [
-      "react",
-      "vue"
-    ],
-    "isOpenToWork": false
-  },
-  {
     "id": 2,
     "name": "Ervin Howell",
     "email": "Shanna@melissa.tv",
