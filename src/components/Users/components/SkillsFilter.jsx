@@ -1,4 +1,5 @@
 const skills = [
+  { value: "all", label: "All" },
   { label: "React", value: "react" },
   { label: "Angular", value: "angular" },
   { label: "Vue", value: "vue" },

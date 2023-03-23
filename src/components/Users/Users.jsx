@@ -1,23 +1,47 @@
 import { Component } from "react";
+
 import { FiPlus } from "react-icons/fi";
-import { FaBeer } from 'react-icons/fa';
-import { AvailabilityFilter, SearchInput, SkillsFilter } from "./UsersFilters";
-import { UsersList } from "./UsersList";
-import { Spinner } from "../Spinner";
 
 import usersJson from "../../data/users.json";
-import { Button } from "../Button/Button";
+import { Modal } from "../Modal/Modal";
+
+import { AvailabilityFilter } from "./components/AvailabilityFilter";
+import { NewUserForm } from "./components/NewUserForm/NewUserForm";
+import { SearchInput } from "./components/SearchInput";
+import { SkillsFilter } from "./components/SkillsFilter";
+import { UsersList } from "./components/UsersList";
 
 const ALL_SKILLS_VALUE = "all";
 
+const USERS_LOCALE_STORAGE_KEY = "users";
+
 export class Users extends Component {
   state = {
-    users: [],
-    isLoading: false,
+    users: usersJson,
+    isModalOpen: false,
     isAvailable: false,
     skills: ALL_SKILLS_VALUE,
     search: "",
   };
+
+  componentDidMount() {
+    const localData = JSON.parse(
+      localStorage.getItem(USERS_LOCALE_STORAGE_KEY)
+    );
+
+    if (localData) {
+      this.setState({ users: localData });
+    }
+  }
+
+  componentDidUpdate(_, prevState) {
+    if (prevState.users.length !== this.state.users.length) {
+      localStorage.setItem(
+        USERS_LOCALE_STORAGE_KEY,
+        JSON.stringify(this.state.users)
+      );
+    }
+  }
 
   handleChangeSkills = (event) => {
     const { value } = event.target;
@@ -36,23 +60,47 @@ export class Users extends Component {
     this.setState({ search: "" });
   };
 
-  applyFilters = () => {
-    const { users, search } = this.state;
-
-    return users.filter((user) =>
-      user.name.toLowerCase().includes(search.toLowerCase())
-    );
+  handleDeleteUser = (userId) => {
+    this.setState((prevState) => {
+      return { users: prevState.users.filter((user) => user.id !== userId) };
+    });
   };
 
-  handleGetUsers = () => {
-    this.setState({ isLoading: true });
-    setTimeout(() => {
-      this.setState({ users: usersJson.slice(0, 2), isLoading: false });
-    }, 1000);
+  handleCreateNewUser = (user) => {
+    this.setState((prevState) => ({
+      users: [{ ...user, id: Date.now() }, ...prevState.users],
+      isModalOpen: false,
+    }));
+  };
+
+  toggleModal = () => {
+    this.setState((prevState) => ({ isModalOpen: !prevState.isModalOpen }));
+  };
+
+  apllyFilters = () => {
+    const { users, search, skills, isAvailable } = this.state;
+
+    let newUsers = users;
+
+    if (search) {
+      newUsers = newUsers.filter((user) =>
+        user.name.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+
+    if (isAvailable) {
+      newUsers = newUsers.filter((user) => user.isOpenToWork);
+    }
+
+    if (skills !== ALL_SKILLS_VALUE) {
+      newUsers = newUsers.filter((user) => user.skills.includes(skills));
+    }
+
+    return newUsers;
   };
 
   render() {
-    const { users, isAvailable, skills, search, isLoading } = this.state;
+    const { isAvailable, skills, search, isModalOpen } = this.state;
 
     return (
       <>
@@ -61,32 +109,41 @@ export class Users extends Component {
             isAvailable={isAvailable}
             onChangeAvailability={this.handleChangeAvailability}
           />
+
           <SkillsFilter
             skillValue={skills}
             onChangeSkill={this.handleChangeSkills}
           />
-          <button type="button" className="btn btn-primary btn-lg ms-auto">
+
+          <button
+            type="button"
+            className="btn btn-primary btn-lg ms-auto"
+            onClick={this.toggleModal}
+          >
             <FiPlus />
           </button>
         </div>
+
         <SearchInput
           search={search}
           onResetSearch={this.handleResetSearch}
           onChangeSearch={this.handleChangeSearch}
         />
 
-        {/* {!isLoading ? <button className="btn btn-primary" onClick={this.handleGetUsers}>Get users</button> : null}
-        {isLoading && <Spinner />} */}
-        {users?.length ? <UsersList users={users} /> : null}
-
-        {isLoading ? (
-          <Spinner />
-        ) : (
-          <Button test='test'>asdfasdfsdf<FaBeer /></Button>
+        {isModalOpen && (
+          <Modal onModalClose={this.toggleModal}>
+            <NewUserForm
+              onSubmit={this.handleCreateNewUser}
+              onModalClose={this.toggleModal}
+            />
+          </Modal>
         )}
+
+        <UsersList
+          users={this.apllyFilters()}
+          onDeleteUser={this.handleDeleteUser}
+        />
       </>
     );
   }
 }
-
-// Button({test: 'test', children: 'Get users'})
