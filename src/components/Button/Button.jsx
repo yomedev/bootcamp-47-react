@@ -1,25 +1,32 @@
-import styled from "styled-components";
-import { HiStatusOnline } from "react-icons/hi";
+import classNames from "classnames";
 
-const MyButton = styled.button`
-  padding: 5px 10px;
-  border: 1px solid blue;
-  border-radius: 5px;
-`;
-
-const MyIcon = styled(HiStatusOnline)`
-  color: ${(props) => (props.isOnline ? "green" : "red")};
-  
-  &:hover {
-    color: pink;
-  }
-`;
-
-export const Button = ({ children }) => {
-  const isOnline = true;
+export const Button = ({
+  type = "button",
+  className = "btn-primary",
+  disabled,
+  isLoading,
+  children,
+  ...props
+}) => {
   return (
-    <MyButton>
-      <MyIcon isOnline={isOnline} />
-    </MyButton>
+    <button
+      type={type}
+      className={classNames("btn", className)}
+      {...props}
+      disabled={isLoading || disabled}
+    >
+      {isLoading ? (
+        <>
+          <span
+            class="spinner-grow spinner-grow-sm"
+            role="status"
+            aria-hidden="true"
+          />
+          <span class="visually-hidden">Loading...</span>
+        </>
+      ) : (
+        children
+      )}
+    </button>
   );
 };
