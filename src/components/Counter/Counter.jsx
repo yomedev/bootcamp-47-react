@@ -1,91 +1,145 @@
-import { Component } from "react";
+import { useEffect, useState } from "react";
+import { FiThumbsUp, FiThumbsDown } from "react-icons/fi";
 
-// addEventListener('click', (event) => {})
+//likes => likes + 1
+// const setState = (param) => {
+//   if (typeof param === "function") {
+//     const newState = param(3); // 4
+//   }
+// };
 
-// const key = 'name'
+// const state = [];
 
-// const person = {
-//   name: 'Bob',
-//   age: 25
+// state.push(3);
+// state.push(4);
+
+// [4, 4]
+
+// if (typeof initialState === 'function') {
+//   const firstState = initialState()
 // }
 
-// const value = person[key]
+const COUNTER_LOCALE_STORAGE_KEY = "counter";
 
-export class Counter extends Component {
-  state = {
-    plus: 0,
-    minus: 0,
+const getLocalData = () => {
+  console.log("getLocalData");
+  return JSON.parse(localStorage.getItem(COUNTER_LOCALE_STORAGE_KEY));
+};
 
-  };
+export const Counter = ({defaultValue = 0}) => {
+  const [likes, setLikes] = useState(() => getLocalData()?.likes ?? defaultValue);
+  const [dislikes, setDislikes] = useState(() => getLocalData()?.dislikes ?? defaultValue);
+  // const [likes, setLikes] = useState(3);
+  // const [dislikes, setDislikes] = useState(4);
 
-  handleMinus = () => {
-    this.setState((prevState) => ({ counter: prevState.counter - 1 }));
-  };
-
-  handlePlus = () => {
-    this.setState((prevState) => ({ counter: prevState.counter + 1 }));
-  };
-
-  handleUpdate = (event) => {
-    const { name } = event.target;
-    this.setState((prev) => ({ [name]: prev[name] + 1 }));
-  };
-
-  getCounter() {
-    return this.state.plus - this.state.minus
-  }
-
-  render() {
-    // const { plus, minus } = this.state;
-
-    return (
-      <div className="mb-5 p-5 text-white bg-dark rounded-3">
-        <h2 className="text-center">Counter</h2>
-        <p className="text-center my-5" style={{ fontSize: 80 }}>
-          {this.getCounter()}
-        </p>
-
-        <div className="d-flex align-items-center justify-content-center w-100">
-          <button
-            name="minus"
-            onClick={this.handleUpdate}
-            className="btn p-3 btn-outline-light w-25 mx-2"
-            type="button"
-          >
-            Minus
-          </button>
-
-          <button
-            name="plus"
-            onClick={this.handleUpdate}
-            className="btn p-3 btn-outline-light w-25 mx-2"
-            type="button"
-          >
-            Plus
-          </button>
-        </div>
-      </div>
+  useEffect(() => {
+    localStorage.setItem(
+      COUNTER_LOCALE_STORAGE_KEY,
+      JSON.stringify({ likes, dislikes })
     );
-  }
-}
+  }, [likes, dislikes]);
 
-// export const Counter = ({defaultValue}) => {
-//   return (
-//     <div className="mb-5 p-5 text-white bg-dark rounded-3">
-//       <h2 className="text-center">Counter</h2>
-//       <p className="text-center my-5" style={{ fontSize: 80 }}>
-//         0
-//       </p>
+  const total = likes - dislikes;
 
-//       <div className="d-flex align-items-center justify-content-center w-100">
-//         <button className="btn p-3 btn-outline-light w-25 mx-2" type="button">
-//           Minus
-//         </button>
+  const handleUpdate = (event) => {
+    const { name } = event.currentTarget;
+    switch (name) {
+      case "likes":
+        setLikes((likes) => likes + 1);
+        break;
+      case "dislikes":
+        setDislikes((dislikes) => dislikes + 1);
+        break;
+      default:
+        throw new Error("Name doesn't exist");
+    }
+  };
 
-//         <button className="btn p-3 btn-outline-light w-25 mx-2" type="button">
-//           Plus
-//         </button>
+  return (
+    <div className="mb-5 p-5 text-white bg-dark rounded-3">
+      <h2 className="text-center">Total</h2>
+      <p className="text-center my-4" style={{ fontSize: 60 }}>
+        {total}
+      </p>
+      <div className="d-flex align-items-center justify-content-center w-100">
+        <button
+          className="position-relative btn p-4 btn-outline-light mx-5"
+          type="button"
+          name="likes"
+          onClick={handleUpdate}
+        >
+          <span className="position-absolute top-0 start-0 translate-middle px-3 py-2 fs-5 fw-bold border border-light border-2 rounded-circle bg-dark text-light">
+            {likes}
+          </span>
+          <FiThumbsUp className="fs-2" />
+        </button>
+
+        <button
+          className="btn p-4 btn-outline-light mx-5 position-relative"
+          type="button"
+          name="dislikes"
+          onClick={handleUpdate}
+        >
+          <span className="position-absolute top-0 start-100 translate-middle px-3 py-2 fs-5 fw-bold border border-light border-2 rounded-circle bg-dark text-light">
+            {dislikes}
+          </span>
+          <FiThumbsDown className="fs-2" />
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// export class Counter extends Component {
+//   state = {
+//     likes: 0,
+//     dislikes: 0,
+//   };
+
+//   handleUpdate = (event) => {
+//     const { name } = event.target;
+//     this.setState((prev) => ({ [name]: prev[name] + 1 }));
+//   };
+
+//   getTotal() {
+//     const {likes, dislikes} = this.state
+//     return likes - dislikes;
+//   }
+
+//   render() {
+//     const { likes, dislikes } = this.state;
+//     return (
+//       <div className="mb-5 p-5 text-white bg-dark rounded-3">
+//         <h2 className="text-center">Total</h2>
+//         <p className="text-center my-4" style={{ fontSize: 60 }}>
+//           {this.getTotal()}
+//         </p>
+//         <div className="d-flex align-items-center justify-content-center w-100">
+//           <button
+//             className="position-relative btn p-4 btn-outline-light mx-5"
+//             type="button"
+//             name="likes"
+//             onClick={this.handleUpdate}
+//           >
+//             <span className="position-absolute top-0 start-0 translate-middle px-3 py-2 fs-5 fw-bold border border-light border-2 rounded-circle bg-dark text-light">
+//               {likes}
+//             </span>
+//             <FiThumbsUp className="fs-2" />
+//           </button>
+
+//           <button
+//             className="btn p-4 btn-outline-light mx-5 position-relative"
+//             type="button"
+//             name="dislikes"
+//             onClick={this.handleUpdate}
+//           >
+//             <span className="position-absolute top-0 start-100 translate-middle px-3 py-2 fs-5 fw-bold border border-light border-2 rounded-circle bg-dark text-light">
+//               {dislikes}
+//             </span>
+//             <FiThumbsDown className="fs-2" />
+//           </button>
+//         </div>
 //       </div>
-//     </div>
-//   );
-// };
+//     );
+//   }
+// }
