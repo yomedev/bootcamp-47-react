@@ -30,11 +30,7 @@ export const TimerModal = () => {
   };
 
   useEffect(() => {
-    return () => {
-      if (intervalIdRef.current) {
-        clearInterval(intervalIdRef.current);
-      }
-    };
+    return handleStopTimer
   }, []);
 
   return (

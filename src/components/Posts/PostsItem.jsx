@@ -1,4 +1,5 @@
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
+import { useAuth } from "../../context/AuthContext";
 
 import { cutString } from "../../helpers/cut-string";
 import image from "./default_image.png";
@@ -33,6 +34,7 @@ import image from "./default_image.png";
 // };
 
 export const PostsItem = ({ post }) => {
+  const {isAuth} = useAuth()
   return (
     <div className="col-12 col-xl-6 col-xxl-4 mb-4">
       <div className="card">
@@ -56,15 +58,17 @@ export const PostsItem = ({ post }) => {
             </li>
           </ul>
 
-          <div className="d-flex">
-            <button type="button" className="btn btn-danger">
-              Delete post
-            </button>
+          {isAuth && (
+            <div className="d-flex">
+              <button type="button" className="btn btn-danger">
+                Delete post
+              </button>
 
-            <a href={`/posts/${post.id}`} className="btn btn-primary ms-3">
-              Read post
-            </a>
-          </div>
+              <a href={`/posts/${post.id}`} className="btn btn-primary ms-3">
+                Read post
+              </a>
+            </div>
+          )}
         </div>
       </div>
     </div>

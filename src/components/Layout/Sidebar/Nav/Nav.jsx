@@ -1,7 +1,8 @@
-import React from "react";
+import { useAuth } from "../../../../context/AuthContext";
 import { Button } from "../../../Button";
 
 export const Nav = () => {
+  const { logout } = useAuth();
   return (
     <>
       <a href="/" style={{ textAlign: "left" }} className="btn btn-light">
@@ -17,7 +18,9 @@ export const Nav = () => {
         Settings
       </a>
 
-      <Button className="btn-danger mt-auto">Log out</Button>
+      <Button className="btn-danger mt-auto" onClick={logout}>
+        Log out
+      </Button>
     </>
   );
 };

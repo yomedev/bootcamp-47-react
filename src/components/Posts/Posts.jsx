@@ -36,7 +36,6 @@ export class Posts extends Component {
     try {
       const posts = await getPosts();
       this.total = posts.totalResults
-      console.log(this.total);
       this.setState({ posts: posts.articles, status: fetchStatus.Success });
     } catch (error) {
       // this.setState({ isError: true });

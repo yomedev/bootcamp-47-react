@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useAuth } from "../../../context/AuthContext";
 import { Button } from "../../Button";
 import { LoginForm } from "../../LoginForm/LoginForm";
 import { Modal } from "../../Modal/Modal";
@@ -6,6 +7,7 @@ import { Nav } from "./Nav";
 
 export const Sidebar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { isAuth } = useAuth();
 
   return (
     <aside
@@ -16,7 +18,7 @@ export const Sidebar = () => {
         className="d-flex flex-column"
         style={{ position: "sticky", top: 30, left: 0, height: "88vh" }}
       >
-        {true ? (
+        {isAuth ? (
           <Nav />
         ) : (
           <Button
@@ -28,7 +30,7 @@ export const Sidebar = () => {
         )}
         {isModalOpen && (
           <Modal onModalClose={() => setIsModalOpen((prev) => !prev)}>
-            <LoginForm />
+            <LoginForm onCloseModal={() => setIsModalOpen((prev) => !prev)} />
           </Modal>
         )}
       </div>

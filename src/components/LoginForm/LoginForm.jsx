@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from "react";
+import { useAuth } from "../../context/AuthContext";
 
 const year = new Date().getFullYear();
 
 export const LoginForm = ({ onCloseModal }) => {
   const [form, setForm] = useState({ email: "", password: "" });
+  const { login } = useAuth();
 
   const inputRef = useRef(null);
   console.log(inputRef.current);
@@ -20,6 +22,7 @@ export const LoginForm = ({ onCloseModal }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(form);
+    login()
     onCloseModal();
   };
 
