@@ -13,7 +13,6 @@ export class PostsSearch extends Component {
   };
 
   handleSubmitSearch = () => {
-    console.log(this.state.search);
     this.props.onSubmit(this.state.search)
   }
 

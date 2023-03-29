@@ -1,42 +1,27 @@
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { Header, Layout } from "./components/Layout";
-import { Memo } from "./components/Memo/Memo";
-import { Posts } from "./components/Posts/Posts";
-import { Rerender } from "./components/Rerender/Rerender";
-import { Users } from "./components/Users/Users";
-import { AuthProvider } from "./context/AuthContext";
+// import { Users } from "./components/Users/Users";
+// import { Articles } from "./components/Articles";
+// import { ReactQueryArticles } from "./components/Articles/ReactQueryArticles";
+import { LoginForm } from "./components/LoginForm/LoginForm";
+
+const queryClient = new QueryClient();
 
 export const App = () => {
-
   return (
-    <AuthProvider>
+    <QueryClientProvider client={queryClient}>
       <Layout>
         <Header title="Hello world!" />
-        <Rerender />
+        <LoginForm />
         {/* <Users /> */}
-        {/* <Memo />
-        <Posts /> */}
+        {/* <ReactQueryArticles /> */}
         <ToastContainer />
       </Layout>
-    </AuthProvider>
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+    </QueryClientProvider>
   );
 };
-
-// const a = 5
-
-// function name(params) {
-//   console.log(a)
-// }
-
-// function func(a, b) {
-//   return () => {
-//     return a + b
-//   }
-// }
-
-// const func2 = func(2, 3)
-
-// const result = func2()
-// console.log(result);
