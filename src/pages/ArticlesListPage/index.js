@@ -1,0 +1,1 @@
+export { ArticlesListPage as default } from './ArticlesListPage';

@@ -1,0 +1,1 @@
+export { ArticlesItem } from './ArticlesItem';

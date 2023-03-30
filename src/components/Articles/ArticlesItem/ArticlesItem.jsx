@@ -1,11 +1,12 @@
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
-import { useAuth } from "../../context/AuthContext";
+import { Link } from "react-router-dom";
+import { useAuth } from "../../../context/AuthContext";
 
-import { cutString } from "../../helpers/cut-string";
+import { cutString } from "../../../helpers/cut-string";
 import image from "./default_image.png";
 
 export const ArticlesItem = ({ article }) => {
-  const {isAuth} = useAuth()
+  const { isAuth } = useAuth();
   return (
     <div className="col-12 col-xl-6 col-xxl-4 mb-4">
       <div className="card">
@@ -35,9 +36,12 @@ export const ArticlesItem = ({ article }) => {
                 Delete article
               </button>
 
-              <a href={`/articles/${article.id}`} className="btn btn-primary ms-3">
+              <Link
+                to={`${article.title}`}
+                className="btn btn-primary ms-3"
+              >
                 Read article
-              </a>
+              </Link>
             </div>
           )}
         </div>

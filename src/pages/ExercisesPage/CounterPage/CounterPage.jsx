@@ -8,7 +8,7 @@ const getLocalData = () => {
   return JSON.parse(localStorage.getItem(COUNTER_LOCALE_STORAGE_KEY));
 };
 
-export const Counter = ({defaultValue = 0}) => {
+export const CounterPage = ({defaultValue = 0}) => {
   const [likes, setLikes] = useState(() => getLocalData()?.likes ?? defaultValue);
   const [dislikes, setDislikes] = useState(() => getLocalData()?.dislikes ?? defaultValue);
 

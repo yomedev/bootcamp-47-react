@@ -12,7 +12,7 @@ export const Button = memo(({ onClick, label }) => {
 
 Button.displayName = 'Button'
 
-export const Rerender = () => {
+export const RerenderPage = () => {
   const [counter, setCounter] = useState(0);
 
   const handleCount = useCallback(() => {

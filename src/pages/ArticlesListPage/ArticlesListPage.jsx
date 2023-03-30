@@ -2,13 +2,13 @@ import React, { useCallback, useState } from "react";
 import { fetchStatus } from "../../constants/fetch-status";
 import { useFetch } from "../../hooks/useFetch";
 import { getArticlesService } from "../../services/articlesService";
-import { Button } from "../Button";
-import { ArticlesError } from "./ArticlesError";
-import { ArticlesItem } from "./ArticlesItem/ArticlesItem";
-import { ArticlesLoader } from "./ArticlesLoader/ArticlesLoader";
-import { ArticlesSearch } from "./ArticlesSearch/ArticlesSearch";
+import { Button } from "../../components/Button";
+import { ArticlesError } from "../../components/Articles/ArticlesError";
+import { ArticlesItem } from "../../components/Articles/ArticlesItem";
+import { ArticlesLoader } from "../../components/Articles/ArticlesLoader";
+import { ArticlesSearch } from "../../components/Articles/ArticlesSearch";
 
-export const Articles = () => {
+export const ArticlesListPage = () => {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
 

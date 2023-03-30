@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
 import { useAuth } from "../../../context/AuthContext";
 import { Button } from "../../Button";
 import { LoginForm } from "../../LoginForm/LoginForm";
@@ -21,12 +22,15 @@ export const Sidebar = () => {
         {isAuth ? (
           <Nav />
         ) : (
-          <Button
-            className="btn-primary"
-            onClick={() => setIsModalOpen((prev) => !prev)}
+          <NavLink
+            to="/login"
+            style={{ textAlign: "left", marginLeft: "-10px" }}
+            className={({ isActive }) =>
+              isActive ? "btn btn-primary" : "btn btn-light"
+            }
           >
             Log in
-          </Button>
+          </NavLink>
         )}
         {isModalOpen && (
           <Modal onModalClose={() => setIsModalOpen((prev) => !prev)}>

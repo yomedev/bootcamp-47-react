@@ -1,26 +1,49 @@
+import { NavLink } from "react-router-dom";
 import { useAuth } from "../../../../context/AuthContext";
 import { Button } from "../../../Button";
+import styles from './Nav.module.css'
+
+
 
 export const Nav = () => {
   const { logout } = useAuth();
+
   return (
-    <>
-      <a href="/" style={{ textAlign: "left" }} className="btn btn-light">
-        Home
-      </a>
-      <a href="/" style={{ textAlign: "left" }} className="btn btn-link">
-        Profile
-      </a>
-      <a href="/" style={{ textAlign: "left" }} className="btn btn-link">
-        Messages
-      </a>
-      <a href="/" style={{ textAlign: "left" }} className="btn btn-link">
-        Settings
-      </a>
+    <div className="d-flex flex-column justify-content-between h-100">
+      <div className="d-flex flex-column justify-content-between">
+        <h2 className="h3 mb-4">Welcome back!</h2>
+        <NavLink
+          to="/"
+          style={{ textAlign: "left", marginLeft: "-10px" }}
+          className={({ isActive }) =>
+            isActive ? `btn ${styles.active}` : "btn btn-light"
+          }
+        >
+          Home
+        </NavLink>
+        <NavLink
+          to="/articles"
+          style={{ textAlign: "left", marginLeft: "-10px" }}
+          className={({ isActive }) =>
+            isActive ? "btn btn-primary" : "btn btn-light"
+          }
+        >
+          Articles
+        </NavLink>
+        <NavLink
+          to="/exercises"
+          style={{ textAlign: "left", marginLeft: "-10px" }}
+          className={({ isActive }) =>
+            isActive ? "btn btn-primary" : "btn btn-light"
+          }
+        >
+          Exercises
+        </NavLink>
+      </div>
 
       <Button className="btn-danger mt-auto" onClick={logout}>
         Log out
       </Button>
-    </>
+    </div>
   );
 };
