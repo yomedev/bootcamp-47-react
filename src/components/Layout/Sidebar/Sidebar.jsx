@@ -22,15 +22,26 @@ export const Sidebar = () => {
         {isAuth ? (
           <Nav />
         ) : (
-          <NavLink
-            to="/login"
-            style={{ textAlign: "left", marginLeft: "-10px" }}
-            className={({ isActive }) =>
-              isActive ? "btn btn-primary" : "btn btn-light"
-            }
-          >
-            Log in
-          </NavLink>
+          <>
+            <NavLink
+              to="/login"
+              style={{ textAlign: "left", marginLeft: "-10px" }}
+              className={({ isActive }) =>
+                isActive ? "btn btn-primary" : "btn btn-light"
+              }
+            >
+              Log in
+            </NavLink>
+            <NavLink
+              to="/register"
+              style={{ textAlign: "left", marginLeft: "-10px" }}
+              className={({ isActive }) =>
+                isActive ? "btn btn-primary" : "btn btn-light"
+              }
+            >
+              Register
+            </NavLink>
+          </>
         )}
         {isModalOpen && (
           <Modal onModalClose={() => setIsModalOpen((prev) => !prev)}>

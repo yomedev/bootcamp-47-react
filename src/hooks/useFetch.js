@@ -11,7 +11,8 @@ export const useFetch = (callback, isInitialRequest) => {
       setStatus(fetchStatus.Loading);
       try {
         const data = await callback();
-        setData((prev) => (isInitialRequest ? data : [...prev, ...data]));
+        // setData((prev) => (isInitialRequest ? data : [...prev, ...data]));
+        setData(data);
         setStatus(fetchStatus.Success);
       } catch (error) {
         toast.error(error.message);

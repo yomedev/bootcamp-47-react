@@ -4,9 +4,15 @@ export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useState(true);
+  const [username, setUsername] = useState("");
 
   const login = () => {
     setIsAuth(true);
+  };
+
+  const register = (username) => {
+    setIsAuth(true);
+    setUsername(username);
   };
 
   const logout = () => {
@@ -14,12 +20,12 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuth, login, logout }}>
+    <AuthContext.Provider value={{ isAuth, username, login, logout, register }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
 export const useAuth = () => {
-  return useContext(AuthContext)
-}
+  return useContext(AuthContext);
+};

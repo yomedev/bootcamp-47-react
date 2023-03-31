@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, Outlet, useLocation, useParams } from "react-router-dom";
 
 import { toast } from "react-toastify";
 
@@ -7,15 +7,15 @@ import { Loader } from "../../components/Loader";
 import { getSingeArticleService } from "../../services/articlesService";
 
 export const SinglearticlePage = () => {
-
-  const {articleId} = useParams()
-  // console.log(param);
-  // const articleId = "ChatGPT Created Its Own Puzzle Game, and You Can Play It Right Now";
-
-  
+  const { articleId } = useParams();
 
   const [article, setArticle] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const location = useLocation()
+
+  const from = location.state?.from
+  console.log(location);
 
   useEffect(() => {
     setIsLoading(true);
@@ -35,6 +35,7 @@ export const SinglearticlePage = () => {
   return (
     article && (
       <>
+        <Link to={from ?? '/articles'} className="btn btn-primary my-3">Back</Link>
         <img
           src={article.urlToImage}
           alt={article.title}
@@ -44,6 +45,12 @@ export const SinglearticlePage = () => {
         <h1 className="mb-5">{article.title}</h1>
 
         <div>{article.description}</div>
+
+        <Link to="newest" state={location.state} className="btn btn-primary my-3">
+          Show newest articles
+        </Link>
+
+        <Outlet />
 
         {/* <div dangerouslySetInnerHTML={{ __html: article.content.replace(/\n/g, '<br/>') }} /> */}
       </>

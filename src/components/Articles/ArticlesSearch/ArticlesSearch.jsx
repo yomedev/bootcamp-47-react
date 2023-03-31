@@ -1,15 +1,18 @@
 import React, { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Button } from "../../Button";
 
-export const ArticlesSearch = ({ onSubmit }) => {
-  const [value, setValue] = useState("");
+export const ArticlesSearch = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const search = searchParams.get("search") ?? "";
+  const [value, setValue] = useState(search);
 
   const handleChange = (event) => {
     setValue(event.target.value);
   };
 
-  const handleSubmit = (event) => {
-    onSubmit(value);
+  const handleSubmit = () => {
+    setSearchParams({ search: value, page: 1 });
   };
 
   return (

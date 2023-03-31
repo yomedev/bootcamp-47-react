@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { fetchStatus } from "../../constants/fetch-status";
 import { useFetch } from "../../hooks/useFetch";
 import { getArticlesService } from "../../services/articlesService";
@@ -7,10 +7,18 @@ import { ArticlesError } from "../../components/Articles/ArticlesError";
 import { ArticlesItem } from "../../components/Articles/ArticlesItem";
 import { ArticlesLoader } from "../../components/Articles/ArticlesLoader";
 import { ArticlesSearch } from "../../components/Articles/ArticlesSearch";
+import { useLocation, useSearchParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useAuth } from "../../context/AuthContext";
 
 export const ArticlesListPage = () => {
-  const [query, setQuery] = useState("");
-  const [page, setPage] = useState(1);
+  // const [query, setQuery] = useState("");
+  // const [page, setPage] = useState(1);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const prevSearchParams = Object.fromEntries([...searchParams]);
+  const query = searchParams.get("search");
+  const page = searchParams.get("page");
 
   const getArticles = useCallback(async () => {
     const data = await getArticlesService({ query, page });
@@ -19,13 +27,30 @@ export const ArticlesListPage = () => {
 
   const { data: articles, status } = useFetch(getArticles, page === 1);
 
-  const handleChangeQuery = (value) => {
-    setQuery(value);
-    setPage(1);
-  };
+  const location = useLocation()
 
-  const handleChangePage = () => {
-    setPage((prev) => prev + 1);
+  // console.log(location);
+
+
+  const isRegistered = location.state?.isRegistered ?? false
+
+  const {username} = useAuth()
+
+  useEffect(() => {
+    if (isRegistered) {
+      toast.success('Welcome ' + username)
+    }
+  }, [isRegistered, username])
+
+  // const handleChangeQuery = (value) => {
+
+  //   // setQuery(value);
+  //   // setPage(1);
+  // };
+
+  const handleChangePage = (page) => {
+    setSearchParams({ ...prevSearchParams, page });
+    // setPage(page);
   };
 
   if (status === fetchStatus.Error) {
@@ -34,7 +59,7 @@ export const ArticlesListPage = () => {
 
   return (
     <>
-      <ArticlesSearch onSubmit={handleChangeQuery} />
+      <ArticlesSearch />
 
       <div className="container-fluid g-0">
         <div className="row">
@@ -46,8 +71,18 @@ export const ArticlesListPage = () => {
 
       {status === fetchStatus.Loading && <ArticlesLoader />}
       {status === fetchStatus.Success && (
-        <div className="d-flex justify-content-center">
-          <Button onClick={handleChangePage}>Load more</Button>
+        <div className="pagination">
+          <div className="btn-group my-2 mx-auto btn-group-lg">
+            {[...Array(8)].map((_, index) => (
+              <Button
+                key={index}
+                disabled={index + 1 === page}
+                onClick={() => handleChangePage(index + 1)}
+              >
+                {index + 1}
+              </Button>
+            ))}
+          </div>
         </div>
       )}
     </>
