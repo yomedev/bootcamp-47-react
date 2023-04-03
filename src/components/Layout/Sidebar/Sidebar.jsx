@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../../../context/AuthContext";
-import { Button } from "../../Button";
 import { LoginForm } from "../../LoginForm/LoginForm";
 import { Modal } from "../../Modal/Modal";
 import { Nav } from "./Nav";

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import { fetchStatus } from "../../constants/fetch-status";
 import { useFetch } from "../../hooks/useFetch";
 import { getArticlesService } from "../../services/articlesService";
@@ -12,9 +12,6 @@ import { toast } from "react-toastify";
 import { useAuth } from "../../context/AuthContext";
 
 export const ArticlesListPage = () => {
-  // const [query, setQuery] = useState("");
-  // const [page, setPage] = useState(1);
-
   const [searchParams, setSearchParams] = useSearchParams();
   const prevSearchParams = Object.fromEntries([...searchParams]);
   const query = searchParams.get("search");
@@ -28,9 +25,6 @@ export const ArticlesListPage = () => {
   const { data: articles, status } = useFetch(getArticles, page === 1);
 
   const location = useLocation()
-
-  // console.log(location);
-
 
   const isRegistered = location.state?.isRegistered ?? false
 

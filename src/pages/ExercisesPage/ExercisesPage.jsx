@@ -3,10 +3,10 @@ import { NavLink, Outlet } from "react-router-dom";
 import { Loader } from "../../components/Loader";
 
 const subPages = [
-  { href: "timer", title: "Timer" },
   { href: "counter", title: "Counter" },
+  { href: "users", title: "Users" },
+  { href: "timer", title: "Timer" },
   { href: "re-render", title: "Re-render" },
-  // { href: "/articles", title: "Articles" },
 ];
 
 export const ExercisesPage = () => {

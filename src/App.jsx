@@ -1,10 +1,8 @@
 import "react-toastify/dist/ReactToastify.css";
-import { lazy, Suspense } from "react";
+import { lazy } from "react";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
 import { Layout } from "./components/Layout";
-// import HomePage from "./pages/HomePage";
-// import ArticlesListPage from "./pages/ArticlesListPage";
 import { ExercisesPage } from "./pages/ExercisesPage/ExercisesPage";
 import { NotFoundPage } from "./pages/NotFoundPage/NotFoundPage";
 import LoginPage from "./pages/LoginPage";
@@ -13,7 +11,7 @@ import { RerenderPage } from "./pages/ExercisesPage/RerenderPage/RerenderPage";
 import { SinglearticlePage } from "./pages/SingleArticlePage/SingleArticlePage";
 import { NewestArticlesPage } from "./pages/NewestArticlesPage/NewestArticlesPage";
 import RegisterPage from "./pages/RegisterPage";
-import { Loader } from "./components/Loader";
+import UsersPage from "./pages/ExercisesPage/UsersPage";
 const CounterPage = lazy(() => import("./pages/ExercisesPage/CounterPage"))
 const HomePage = lazy(() => import("./pages/HomePage"));
 const ArticlesListPage = lazy(() => import("./pages/ArticlesListPage"));
@@ -30,9 +28,10 @@ export const App = () => {
               <Route path="newest" element={<NewestArticlesPage />} />
             </Route>
             <Route path="exercises" element={<ExercisesPage />}>
-              <Route index element={<Navigate to="timer" />} />
+              <Route index element={<Navigate to="counter" />} />
               <Route path="timer" element={<TimerPage />} />
               <Route path="counter" element={<CounterPage />} />
+              <Route path="users" element={<UsersPage />} />
               <Route path="re-render" element={<RerenderPage />} />
             </Route>
 
