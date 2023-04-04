@@ -1,10 +1,24 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { changeSearchAction } from "../../../redux/users/usersSlice";
 
-export const SearchInput = ({ onChangeSearch, onResetSearch, search }) => {
+export const SearchInput = () => {
+  const search = useSelector((state) => state.users.search);
+  const dispatch = useDispatch();
+
   const [value, setValue] = useState(search);
 
   const handleChangeValue = (event) => {
     setValue(event.target.value);
+  };
+
+  const handleSubmit = () => {
+    dispatch(changeSearchAction(value));
+  };
+
+  const handleResetSearch = () => {
+    setValue("");
+    dispatch(changeSearchAction(""));
   };
 
   return (
@@ -19,17 +33,14 @@ export const SearchInput = ({ onChangeSearch, onResetSearch, search }) => {
       <button
         className="btn btn-outline-primary"
         type="button"
-        onClick={() => onChangeSearch(value)}
+        onClick={handleSubmit}
       >
         Submit
       </button>
       <button
         className="btn btn-outline-secondary"
         type="button"
-        onClick={() => {
-          setValue("");
-          onResetSearch();
-        }}
+        onClick={handleResetSearch}
       >
         Reset
       </button>

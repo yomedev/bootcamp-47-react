@@ -3,7 +3,7 @@ import { NotFound } from "./NotFound";
 import { useSelector } from "react-redux";
 import { useMemo } from "react";
 
-export const UsersList = ({ onDeleteUser }) => {
+export const UsersList = () => {
 
   const users = useSelector(state => state.users.data)
   const search = useSelector(state => state.users.search) 
@@ -21,7 +21,7 @@ export const UsersList = ({ onDeleteUser }) => {
   return (
     <div className="mb-5">
       {filteredUsers.map((user) => (
-        <UsersItem key={user.id} user={user} onDeleteUser={onDeleteUser} />
+        <UsersItem key={user.id} user={user} />
       ))}
     </div>
   );

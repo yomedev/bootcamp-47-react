@@ -1,13 +1,23 @@
+import { createReducer } from "@reduxjs/toolkit";
+import { decrementAction, incrementAction } from "./counterActions";
 import { counterInitialState } from "./counterInitialState";
-import { INCREMENT, DECREMENT } from "./counterTypes";
 
-export const counterReducer = (state = counterInitialState, action) => {
-  switch (action.type) {
-    case INCREMENT:
-      return state + 1;
-    case DECREMENT:
-      return state - 1;
-    default:
-      return state;
-  }
-};
+// const counter = {
+//   [INCREMENT]: (state) => state + 1,
+//   [DECREMENT]: (state) => state - 1,
+// };
+
+// export const counterReducer = (state = counterInitialState, action) => {
+//   return counter[action.type] ? counter[action.type](state) : state
+// };
+
+// export const counterReducer = createReducer(counterInitialState, {
+//   [incrementAction]: (state, { payload }) => state + payload,
+//   [decrementAction]: (state, { payload }) => state - payload,
+// });
+
+export const counterReducer = createReducer(counterInitialState, (builder) => {
+  builder
+    .addCase(incrementAction, (state, { payload }) => state + payload)
+    .addCase(decrementAction, (state, { payload }) => state - payload);
+});

@@ -1,6 +1,6 @@
 import { FiThumbsUp, FiThumbsDown } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
-import { INCREMENT, DECREMENT } from "../../../redux/counter/counterTypes";
+import { decrementAction, incrementAction } from "../../../redux/counter/counterActions";
 
 // useSelector (selector) {
 //  return selector(store.getState())
@@ -8,7 +8,6 @@ import { INCREMENT, DECREMENT } from "../../../redux/counter/counterTypes";
 
 export const CounterPage = () => {
   const counter = useSelector((state) => state.counter);
-  console.log(counter);
   const dispatch = useDispatch();
 
   return (
@@ -22,7 +21,7 @@ export const CounterPage = () => {
           className="position-relative btn p-4 btn-outline-light mx-5"
           type="button"
           name="plus"
-          onClick={() => dispatch({ type: INCREMENT })}
+          onClick={() => dispatch(incrementAction(10))}
         >
           <FiThumbsUp className="fs-2" />
         </button>
@@ -31,7 +30,7 @@ export const CounterPage = () => {
           className="btn p-4 btn-outline-light mx-5 position-relative"
           type="button"
           name="minus"
-          onClick={() => dispatch({ type: DECREMENT })}
+          onClick={() => dispatch(decrementAction(10))}
         >
           <FiThumbsDown className="fs-2" />
         </button>
