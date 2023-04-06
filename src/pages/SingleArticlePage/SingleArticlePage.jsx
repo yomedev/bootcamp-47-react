@@ -4,7 +4,7 @@ import { Link, Outlet, useLocation, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import { Loader } from "../../components/Loader";
-import { getSingeArticleService } from "../../services/articlesService";
+import { getSingelArticleService } from "../../services/articlesService";
 
 export const SinglearticlePage = () => {
   const { articleId } = useParams();
@@ -20,7 +20,7 @@ export const SinglearticlePage = () => {
   useEffect(() => {
     setIsLoading(true);
 
-    getSingeArticleService(articleId)
+    getSingelArticleService(articleId)
       .then(setArticle)
       .catch(() => {
         toast.error("Something went wrong!");
@@ -44,7 +44,7 @@ export const SinglearticlePage = () => {
         />
         <h1 className="mb-5">{article.title}</h1>
 
-        <div>{article.description}</div>
+        <div>{article.content}</div>
 
         <Link to="newest" state={location.state} className="btn btn-primary my-3">
           Show newest articles

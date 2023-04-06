@@ -1,6 +1,5 @@
 {
   "name": "bootcamp-47-react",
-  "homepage": "github/repository/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -24,6 +23,7 @@
     "redux": "^4.2.1",
     "redux-devtools-extension": "^2.13.9",
     "redux-persist": "^6.0.0",
+    "redux-thunk": "^2.4.2",
     "styled-components": "^5.3.9",
     "web-vitals": "^2.1.4"
   },

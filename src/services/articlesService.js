@@ -1,41 +1,28 @@
 import axios from "axios";
-import { format } from "date-fns";
 
-axios.defaults.baseURL = "https://newsapi.org/v2/";
-axios.defaults.params = {
-  apiKey: "8cb01996c0d34dbebd5fe5c1bf4080cf",
-  pageSize: 8,
-};
+axios.defaults.baseURL = "https://642db3cc66a20ec9cea44565.mockapi.io/articles";
 
-export const getArticlesService = async ({ query, page }) => {
-  const { data } = await axios.get("everything", {
-    params: {
-      q: query || "javascript",
-      page: page,
-    },
-  });
+export const getArticlesService = async () => {
+  const { data } = await axios.get("");
 
   return data;
 };
 
-export const getSingeArticleService = async (query) => {
-  const { data } = await axios.get("everything", {
-    params: {
-      q: query,
-      searchIn: 'title',
-      pageSize: 4
-    },
-  });
-  return data.articles[0];
-}
-
-export const getNewestArticles = async () => {
-  const { data } = await axios.get("everything", {
-    params: {
-      q: 'news',
-      to: format(new Date(), 'yyyy-MM-dd'),
-      pageSize: 3
-    },
-  });
+export const getSingelArticleService = async (id) => {
+  const { data } = await axios.get(`${id}`);
   return data;
-}
+};
+
+export const createArticleService = async (body) => {
+  // console.log(body);
+  const { data } = await axios.post('', body);
+  console.log(data);
+  return data;
+};
+
+export const deleteArticleService = async (id) => {
+  const { data } = await axios.delete(`${id}`);
+  return data;
+};
+
+export const getNewestArticles = () => {};

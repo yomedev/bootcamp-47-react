@@ -12,15 +12,15 @@ export const Layout = () => {
       <div className="d-flex h-100">
         <Sidebar />
 
-        <main
-          className="tab-content p-5 h-100 w-100"
-          style={{ minHeight: "100vh" }}
-        >
-          <div className="tab-pane fade show active"><Suspense fallback={<Loader />}><Outlet /></Suspense></div>
+        <main className="tab-content p-5 h-100 col-10" style={{ minHeight: '100vh' }}>
+          <div className="tab-pane fade show active">
+            <Suspense fallback={<Loader />}>
+              <Outlet />
+            </Suspense>
+          </div>
         </main>
       </div>
       <ToastContainer />
     </AuthProvider>
   );
 };
-

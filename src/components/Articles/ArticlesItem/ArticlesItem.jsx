@@ -5,10 +5,20 @@ import { useAuth } from "../../../context/AuthContext";
 import { cutString } from "../../../helpers/cut-string";
 import image from "./default_image.png";
 
+import { useDispatch } from "react-redux";
+import { deleteArticleThunk } from "../../../redux/articles/articlesThunk";
+
 export const ArticlesItem = ({ article }) => {
   const { isAuth } = useAuth();
   const location = useLocation();
   console.log(location);
+
+  const dispatch = useDispatch()
+
+  const handleDelete = () => {
+    dispatch(deleteArticleThunk(article.id))
+  }
+
   return (
     <div className="col-12 col-sm-6 col-lg-4 mb-4">
       <div className="card">
@@ -34,12 +44,12 @@ export const ArticlesItem = ({ article }) => {
 
           {isAuth && (
             <div className="d-flex">
-              <button type="button" className="btn btn-danger">
+              <button type="button" className="btn btn-danger" onClick={handleDelete}>
                 Delete article
               </button>
 
               <Link
-                to={article.title}
+                to={article.id}
                 className="btn btn-primary ms-3"
                 state={{ from: location }}
               >

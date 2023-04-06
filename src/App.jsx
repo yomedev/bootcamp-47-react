@@ -12,6 +12,8 @@ import { SinglearticlePage } from "./pages/SingleArticlePage/SingleArticlePage";
 import { NewestArticlesPage } from "./pages/NewestArticlesPage/NewestArticlesPage";
 import RegisterPage from "./pages/RegisterPage";
 import UsersPage from "./pages/ExercisesPage/UsersPage";
+import { NewArticlePage } from "./pages/NewArticlePage/NewArticlePage";
+import { MiddlewarePage } from "./pages/ExercisesPage/MiddlewarePage/MiddlewarePage";
 const CounterPage = lazy(() => import("./pages/ExercisesPage/CounterPage"))
 const HomePage = lazy(() => import("./pages/HomePage"));
 const ArticlesListPage = lazy(() => import("./pages/ArticlesListPage"));
@@ -24,6 +26,7 @@ export const App = () => {
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
             <Route path="articles" element={<ArticlesListPage />} />
+            <Route path="new-article" element={<NewArticlePage />} />
             <Route path="articles/:articleId" element={<SinglearticlePage />}>
               <Route path="newest" element={<NewestArticlesPage />} />
             </Route>
@@ -33,6 +36,7 @@ export const App = () => {
               <Route path="counter" element={<CounterPage />} />
               <Route path="users" element={<UsersPage />} />
               <Route path="re-render" element={<RerenderPage />} />
+              <Route path="middleware" element={<MiddlewarePage />} />
             </Route>
 
             <Route path="login" element={<LoginPage />} />
