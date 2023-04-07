@@ -49,6 +49,7 @@ import storage from "redux-persist/lib/storage";
 import { counterReducer } from "./counter/counterReducer";
 import { usersReducer } from "./users/usersSlice";
 import { articlesReducer } from "./articles/articlesSlice";
+import { articlesApi } from "./articlesRtk/articlesApi";
 
 const config = {
   key: "users",
@@ -64,7 +65,8 @@ export const store = configureStore({
   reducer: {
     counter: counterReducer,
     users: persistedReducer,
-    articles: articlesReducer
+    articles: articlesReducer,
+    [articlesApi.reducerPath]: articlesApi.reducer
   },
   devTools: process.env.NODE_ENV === "development",
   // middleware: (getDefaultMiddleware) => getDefaultMiddleware()
@@ -73,7 +75,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }),
+    }).concat(articlesApi.middleware),
 });
 
 export const persistor = persistStore(store);

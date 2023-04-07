@@ -1,28 +1,36 @@
 import { UsersItem } from "./UsersItem";
 import { NotFound } from "./NotFound";
 import { useSelector } from "react-redux";
-import { useMemo } from "react";
+import { useState } from "react";
+import {
+  selectFilteredUsers,
+  selectUsersOpenToWorkTotal,
+} from "../../../redux/users/usersSelectors";
 
 export const UsersList = () => {
+  // const [counter, setCounter] = useState(0);
+  const filteredUsers = useSelector(selectFilteredUsers);
+  const openToWorkTotal = useSelector(selectUsersOpenToWorkTotal);
 
-  const users = useSelector(state => state.users.data)
-  const search = useSelector(state => state.users.search) 
-
-  const filteredUsers = useMemo(() => {
-    return users.filter((user) =>
-      user.name.toLowerCase().includes(search.toLowerCase())
-    );
-  }, [search, users]);
-
-  if (!users.length) {
+  if (!filteredUsers.length) {
     return <NotFound />;
   }
 
   return (
-    <div className="mb-5">
-      {filteredUsers.map((user) => (
-        <UsersItem key={user.id} user={user} />
-      ))}
-    </div>
+    <>
+      {/* <p>{counter}</p>
+      <button
+        className="btn btn-primary my-4"
+        onClick={() => setCounter((prev) => prev + 1)}
+      >
+        +1
+      </button> */}
+      <p>Open to work: {openToWorkTotal}</p>
+      <div className="mb-5">
+        {filteredUsers.map((user) => (
+          <UsersItem key={user.id} user={user} />
+        ))}
+      </div>
+    </>
   );
 };

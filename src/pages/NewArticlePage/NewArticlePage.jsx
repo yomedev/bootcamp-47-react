@@ -4,8 +4,9 @@ import { toast } from "react-toastify";
 
 import { Loader } from "../../components/Loader";
 import { getArticleInfo } from "./helpers";
-import { useDispatch } from "react-redux";
-import { createArticleThunk } from "../../redux/articles/articlesThunk";
+// import { useDispatch } from "react-redux";
+// import { createArticleThunk } from "../../redux/articles/articlesThunk";
+import { useCreateArticleMutation } from "../../redux/articlesRtk/articlesApi";
 
 const { title, content, author, urlToImage, publishedAt } = getArticleInfo();
 
@@ -18,11 +19,12 @@ const initialState = {
 };
 
 export const NewArticlePage = () => {
+  // const dispatch = useDispatch()
 
-  const dispatch = useDispatch()
-
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const [form, setForm] = useState(() => getArticleInfo());
+
+  const [createArticle, { isLoading }] = useCreateArticleMutation();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -40,8 +42,9 @@ export const NewArticlePage = () => {
       return;
     }
 
-    setIsLoading(true);
-    dispatch(createArticleThunk(form))
+    // setIsLoading(true);
+    // dispatch(createArticleThunk(form))
+    createArticle(form);
   };
 
   return (
@@ -99,7 +102,6 @@ export const NewArticlePage = () => {
             />
           )}
         </div>
-
 
         <div className="d-flex mt-5">
           <button

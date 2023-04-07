@@ -8,17 +8,11 @@ import { UsersList } from "../../../components/Users/components/UsersList";
 import { useDispatch, useSelector } from "react-redux";
 import {
   toggleModalAction,
-  createUserAction,
 } from "../../../redux/users/usersSlice";
 
 export const UsersPage = () => {
   const { isModalOpen } = useSelector((state) => state.users);
   const dispatch = useDispatch();
-
-  const handleCreateNewUser = (user) => {
-    dispatch(createUserAction(user));
-    dispatch(toggleModalAction());
-  };
 
   const toggleModal = () => {
     dispatch(toggleModalAction());
@@ -40,10 +34,7 @@ export const UsersPage = () => {
 
       {isModalOpen && (
         <Modal onModalClose={toggleModal}>
-          <NewUserForm
-            onSubmit={handleCreateNewUser}
-            onModalClose={toggleModal}
-          />
+          <NewUserForm />
         </Modal>
       )}
 

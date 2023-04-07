@@ -4,19 +4,23 @@ import { useAuth } from "../../../context/AuthContext";
 
 import { cutString } from "../../../helpers/cut-string";
 import image from "./default_image.png";
+import { useDeleteArticleMutation } from "../../../redux/articlesRtk/articlesApi";
 
-import { useDispatch } from "react-redux";
-import { deleteArticleThunk } from "../../../redux/articles/articlesThunk";
+// import { useDispatch } from "react-redux";
+// import { deleteArticleThunk } from "../../../redux/articles/articlesThunk";
 
 export const ArticlesItem = ({ article }) => {
   const { isAuth } = useAuth();
   const location = useLocation();
-  console.log(location);
 
-  const dispatch = useDispatch()
+  const [deleteArticle] = useDeleteArticleMutation()
+
+
+  // const dispatch = useDispatch()
 
   const handleDelete = () => {
-    dispatch(deleteArticleThunk(article.id))
+    deleteArticle(article.id)
+    // dispatch(deleteArticleThunk(article.id))
   }
 
   return (

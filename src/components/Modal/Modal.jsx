@@ -14,16 +14,13 @@ export const Modal = ({ onModalClose, children }) => {
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
-        console.log(event);
         onModalClose();
       }
     };
-    console.log("addEventListener");
     window.addEventListener("keydown", handleKeyDown);
     document.body.style.overflow = "hidden";
 
     return () => {
-      console.log("removeEventListener");
       window.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "auto";
     };

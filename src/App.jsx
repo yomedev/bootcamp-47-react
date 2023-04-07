@@ -14,6 +14,7 @@ import RegisterPage from "./pages/RegisterPage";
 import UsersPage from "./pages/ExercisesPage/UsersPage";
 import { NewArticlePage } from "./pages/NewArticlePage/NewArticlePage";
 import { MiddlewarePage } from "./pages/ExercisesPage/MiddlewarePage/MiddlewarePage";
+import { ArticlesListPageRtk } from "./pages/ArticlesListPageRtk/ArticlesListPageRtk";
 const CounterPage = lazy(() => import("./pages/ExercisesPage/CounterPage"))
 const HomePage = lazy(() => import("./pages/HomePage"));
 const ArticlesListPage = lazy(() => import("./pages/ArticlesListPage"));
@@ -25,6 +26,7 @@ export const App = () => {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
+            <Route path="articles-rtk" element={<ArticlesListPageRtk />} />
             <Route path="articles" element={<ArticlesListPage />} />
             <Route path="new-article" element={<NewArticlePage />} />
             <Route path="articles/:articleId" element={<SinglearticlePage />}>
