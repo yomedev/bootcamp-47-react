@@ -1,22 +1,26 @@
 import { NavLink } from "react-router-dom";
-import { useAuth } from "../../../../context/AuthContext";
 import { Button } from "../../../Button";
-import styles from './Nav.module.css'
-
-
+import { UserCard } from "../../../UserCard/UserCard";
+import { useDispatch } from "react-redux";
+import { logoutAction } from "../../../../redux/auth/authSlice";
 
 export const Nav = () => {
-  const { logout } = useAuth();
+
+  const dispatch = useDispatch()
+  
+  const handleLogout = () => {
+    dispatch(logoutAction())
+  }
 
   return (
     <div className="d-flex flex-column justify-content-between h-100">
+      <UserCard />
       <div className="d-flex flex-column justify-content-between">
-        <h2 className="h3 mb-4">Welcome back!</h2>
         <NavLink
           to="/"
           style={{ textAlign: "left", marginLeft: "-10px" }}
           className={({ isActive }) =>
-            isActive ? `btn ${styles.active}` : "btn btn-light"
+            isActive ? "btn btn-primary" : "btn btn-light"
           }
         >
           Home
@@ -29,15 +33,6 @@ export const Nav = () => {
           }
         >
           Articles
-        </NavLink>
-        <NavLink
-          to="/articles-rtk"
-          style={{ textAlign: "left", marginLeft: "-10px" }}
-          className={({ isActive }) =>
-            isActive ? "btn btn-primary" : "btn btn-light"
-          }
-        >
-          Articles Rtk
         </NavLink>
         <NavLink
           to="/new-article"
@@ -59,7 +54,7 @@ export const Nav = () => {
         </NavLink>
       </div>
 
-      <Button className="btn-danger mt-auto" onClick={logout}>
+      <Button className="btn-danger mt-auto" onClick={handleLogout}>
         Log out
       </Button>
     </div>

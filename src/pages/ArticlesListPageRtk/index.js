@@ -1,1 +1,0 @@
-export { ArticlesListPageRtk as default } from './ArticlesListPageRtk';

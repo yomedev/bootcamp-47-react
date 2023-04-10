@@ -1,5 +1,5 @@
 import "react-toastify/dist/ReactToastify.css";
-import { lazy } from "react";
+import { lazy, useEffect } from "react";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
 import { Layout } from "./components/Layout";
@@ -9,44 +9,52 @@ import LoginPage from "./pages/LoginPage";
 import { TimerPage } from "./pages/ExercisesPage/TimerPage/TimerPage";
 import { RerenderPage } from "./pages/ExercisesPage/RerenderPage/RerenderPage";
 import { SinglearticlePage } from "./pages/SingleArticlePage/SingleArticlePage";
-import { NewestArticlesPage } from "./pages/NewestArticlesPage/NewestArticlesPage";
 import RegisterPage from "./pages/RegisterPage";
 import UsersPage from "./pages/ExercisesPage/UsersPage";
 import { NewArticlePage } from "./pages/NewArticlePage/NewArticlePage";
 import { MiddlewarePage } from "./pages/ExercisesPage/MiddlewarePage/MiddlewarePage";
-import { ArticlesListPageRtk } from "./pages/ArticlesListPageRtk/ArticlesListPageRtk";
-const CounterPage = lazy(() => import("./pages/ExercisesPage/CounterPage"))
+import { useDispatch, useSelector } from "react-redux";
+import { fetchStatus } from "./constants/fetch-status";
+import { getProfileThunk } from "./redux/profile/profileThunk";
+const CounterPage = lazy(() => import("./pages/ExercisesPage/CounterPage"));
 const HomePage = lazy(() => import("./pages/HomePage"));
 const ArticlesListPage = lazy(() => import("./pages/ArticlesListPage"));
 
 export const App = () => {
+  const status = useSelector((state) => state.auth.status);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (status === fetchStatus.Success) {
+      dispatch(getProfileThunk());
+    }
+  }, [status, dispatch]);
+
   return (
     <BrowserRouter>
-      {/* <Suspense fallback={<Loader />}> */}
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<HomePage />} />
-            <Route path="articles-rtk" element={<ArticlesListPageRtk />} />
-            <Route path="articles" element={<ArticlesListPage />} />
-            <Route path="new-article" element={<NewArticlePage />} />
-            <Route path="articles/:articleId" element={<SinglearticlePage />}>
-              <Route path="newest" element={<NewestArticlesPage />} />
-            </Route>
-            <Route path="exercises" element={<ExercisesPage />}>
-              <Route index element={<Navigate to="counter" />} />
-              <Route path="timer" element={<TimerPage />} />
-              <Route path="counter" element={<CounterPage />} />
-              <Route path="users" element={<UsersPage />} />
-              <Route path="re-render" element={<RerenderPage />} />
-              <Route path="middleware" element={<MiddlewarePage />} />
-            </Route>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<HomePage />} />
+          <Route path="articles" element={<ArticlesListPage />} />
+          <Route path="new-article" element={<NewArticlePage />} />
+          <Route path="articles/:articleId" element={<SinglearticlePage />} />
 
-            <Route path="login" element={<LoginPage />} />
-            <Route path="register" element={<RegisterPage />} />
-            <Route path="*" element={<NotFoundPage />} />
+          <Route path="exercises" element={<ExercisesPage />}>
+            <Route index element={<Navigate to="counter" />} />
+            <Route path="timer" element={<TimerPage />} />
+            <Route path="counter" element={<CounterPage />} />
+            <Route path="users" element={<UsersPage />} />
+            <Route path="re-render" element={<RerenderPage />} />
+            <Route path="middleware" element={<MiddlewarePage />} />
           </Route>
-        </Routes>
-      {/* </Suspense> */}
+
+          <Route path="login" element={<LoginPage />} />
+          <Route path="register" element={<RegisterPage />} />
+
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
+      </Routes>
     </BrowserRouter>
   );
 };

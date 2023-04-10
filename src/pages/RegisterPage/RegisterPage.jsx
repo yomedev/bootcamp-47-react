@@ -1,106 +1,123 @@
-import { useForm } from "react-hook-form";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { useState } from "react";
+
+import { Link, useNavigate } from "react-router-dom";
+import { createUserService } from "../../services/usersService";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { loginThunk } from "../../redux/auth/authThunk";
+import { omit } from "lodash-es";
 
 const year = new Date().getFullYear();
 
+const initialState = {
+  email: "",
+  first_name: "",
+  last_name: "",
+  password: "",
+};
+
 export const RegisterPage = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      email: "",
-      password: "",
-      username: "",
-    },
-    mode: "onBlur",
-  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [values, setValues] = useState(initialState);
 
-  const location = useLocation();
-  console.log(location);
-
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  console.log(errors);
+  const handleChange = (event) => {
+    const { value, name } = event.target;
+    setValues((prev) => ({ ...prev, [name]: value }));
+  };
 
-  const { register: registerUser } = useAuth();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      await createUserService(values);
+      await dispatch(
+        loginThunk(omit(values, "first_name", "last_name"))
+      ).unwrap();
+      navigate("/articles", { replace: true });
+    } catch (error) {
+      toast.error(error.message);
+    }
 
-  const onSubmit = (data) => {
-    console.log(data);
-    registerUser(data.username);
-    navigate("/articles", { replace: true, state: { isRegistered: true } });
+    setIsLoading(true);
   };
 
   return (
-    <form
-      className="form-signin d-flex align-items-center justify-content-center mt-5"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <div className="d-block" style={{ width: 300, height: "max-content" }}>
-        <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
+    <>
+      <form
+        action="#"
+        className="mt-5 mx-auto p-0"
+        style={{ width: "450px" }}
+        onSubmit={handleSubmit}
+      >
+        <h1 className="h3 mb-3 fw-normal">Please Sign In</h1>
 
-        <div className="form-floating">
+        <div className="form-floating my-4">
           <input
-            {...register("email", {
-              required: { value: true, message: "Email is required field" },
-              minLength: {
-                value: 6,
-                message: "Email must be at least 6 characters",
-              },
-            })}
-            type="email"
-            className="form-control"
             id="email"
-            placeholder="name@example.com"
+            name="email"
+            type="email"
+            autoComplete="username"
+            value={values.email}
+            onChange={handleChange}
+            className="form-control"
           />
-          {errors?.email && (
-            <p style={{ color: "red" }}>{errors.email.message}</p>
-          )}
           <label htmlFor="email">Email address</label>
         </div>
-        <div className="form-floating mt-4">
+
+        <div className="form-floating my-4">
           <input
-            {...register("password", {
-              required: { value: true, message: "Password is required field" },
-              minLength: {
-                value: 6,
-                message: "Password must be at least 6 characters",
-              },
-              pattern: {
-                value: /(?=.*[0-9])/,
-                message: "Password must have at least one digit",
-              },
-            })}
+            id="first_name"
+            name="first_name"
+            type="first_name"
+            autoComplete="off"
+            value={values.first_name}
+            onChange={handleChange}
+            className="form-control"
+          />
+          <label htmlFor="first_name">First Name</label>
+        </div>
+
+        <div className="form-floating my-4">
+          <input
+            id="last_name"
+            name="last_name"
+            type="last_name"
+            autoComplete="off"
+            value={values.last_name}
+            onChange={handleChange}
+            className="form-control"
+          />
+          <label htmlFor="last_name">Last Name</label>
+        </div>
+
+        <div className="form-floating my-4">
+          <input
+            id="password"
+            name="password"
             type="password"
+            autoComplete="current-password"
+            value={values.password}
+            onChange={handleChange}
             className="form-control"
-            id="pass"
-            placeholder="Password"
           />
-          {errors?.password && (
-            <p style={{ color: "red" }}>{errors.password.message}</p>
-          )}
-          <label htmlFor="pass">Password</label>
+          <label htmlFor="password">Password</label>
         </div>
 
-        <div className="form-floating mt-4">
-          <input
-            {...register("username")}
-            type="text"
-            className="form-control"
-            id="username"
-            placeholder="Username"
-          />
-          <label htmlFor="username">Username</label>
-        </div>
+        <Link to="/login" className="d-block my-4">
+          Already has account?
+        </Link>
 
-        <button className="w-100 btn btn-lg btn-primary mt-4" type="submit">
-          Sign in
+        <button
+          className="w-100 mt-2 btn btn-lg btn-primary"
+          disabled={isLoading}
+          type="submit"
+        >
+          {isLoading ? "Loading ...." : "Sign In"}
         </button>
-
         <p className="mt-5 mb-3 text-muted">© {year}</p>
-      </div>
-    </form>
+      </form>
+    </>
   );
 };

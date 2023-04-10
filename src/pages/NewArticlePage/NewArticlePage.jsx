@@ -1,56 +1,50 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import { toast } from "react-toastify";
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
-import { Loader } from "../../components/Loader";
-import { getArticleInfo } from "./helpers";
-// import { useDispatch } from "react-redux";
-// import { createArticleThunk } from "../../redux/articles/articlesThunk";
-import { useCreateArticleMutation } from "../../redux/articlesRtk/articlesApi";
-
-const { title, content, author, urlToImage, publishedAt } = getArticleInfo();
-
+import { Loader } from '../../components/Loader';
+import { createNewPostService } from '../../services/postsService';
 const initialState = {
-  title,
-  content,
-  urlToImage,
-  author,
-  publishedAt,
+  title: '',
+  content: '',
+  image: '',
+  preview_image: '',
 };
 
 export const NewArticlePage = () => {
-  // const dispatch = useDispatch()
+  const navigate = useNavigate();
 
-  // const [isLoading, setIsLoading] = useState(false);
-  const [form, setForm] = useState(() => getArticleInfo());
+  const [isLoading, setIsLoading] = useState(false);
+  const [form, setForm] = useState(initialState);
 
-  const [createArticle, { isLoading }] = useCreateArticleMutation();
-
-  const handleChange = (event) => {
+  const handleChange = event => {
     const { name, value } = event.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm(prev => ({ ...prev, [name]: value }));
   };
-
   const handleReset = () => setForm(initialState);
-
-  const handleSubmit = (event) => {
+  const handleSubmit = event => {
     event.preventDefault();
-
-    const isEmpty = Object.values(form).some((item) => !item);
+    const isEmpty = Object.values(form).some(item => !item);
     if (isEmpty) {
-      toast.error("Fill all required fields!");
+      toast.error('Fill all required fields!');
       return;
     }
 
-    // setIsLoading(true);
-    // dispatch(createArticleThunk(form))
-    createArticle(form);
+    setIsLoading(true);
+    createNewPostService(form)
+      .then(post => {
+        navigate(`/posts/${post.id}`, { state: { isPostCreated: true } });
+        toast.success('You have successfully created a new post!');
+      })
+      .catch(() => {
+        toast.error('Something went wrong!');
+      })
+      .finally(() => setIsLoading(false));
   };
-
   return (
     <>
       {isLoading && <Loader />}
-
       <form action="#" onSubmit={handleSubmit}>
         <div className="mb-3">
           <label className="d-block form-label">
@@ -65,7 +59,6 @@ export const NewArticlePage = () => {
             />
           </label>
         </div>
-
         <div className="mb-3">
           <label className="d-block form-label">
             <p>Post content</p>
@@ -79,39 +72,38 @@ export const NewArticlePage = () => {
             />
           </label>
         </div>
-
         <div className="mb-3">
           <label className="d-block form-label">
-            <p>Image url</p>
+            <p>Preview image url (small image)</p>
             <input
               type="text"
-              name="urlToImage"
-              value={form.urlToImage}
+              name="preview_image"
+              value={form.preview_image}
               onChange={handleChange}
               className="form-control"
               placeholder="https://example.com/samll_image.jpeg"
             />
           </label>
-
-          {form.urlToImage && (
-            <img
-              src={form.urlToImage}
-              className="img-thumbnail"
-              alt=""
-              style={{ height: "200px" }}
-            />
-          )}
+          {form.image && <img src={form.preview_image} className="img-thumbnail" alt="" style={{ height: '200px' }} />}
         </div>
-
+        <div className="mb-3">
+          <label className="d-block form-label">
+            <p>Post image url (large image)</p>
+            <input
+              type="text"
+              name="image"
+              value={form.image}
+              onChange={handleChange}
+              className="form-control"
+              placeholder="https://example.com/large_image.jpeg"
+            />
+          </label>
+          {form.image && <img src={form.image} className="img-thumbnail" alt="" style={{ height: '200px' }} />}
+        </div>
         <div className="d-flex mt-5">
-          <button
-            type="button"
-            className="d-block btn btn-secondary me-4"
-            onClick={handleReset}
-          >
+          <button type="button" className="d-block btn btn-secondary me-4" onClick={handleReset}>
             Reset form
           </button>
-
           <button type="submit" className="btn btn-primary">
             Submit
           </button>

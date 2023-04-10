@@ -1,125 +1,79 @@
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+
+import { Link, useNavigate } from "react-router-dom";
+import { loginThunk } from "../../redux/auth/authThunk";
+import { toast } from "react-toastify";
 
 const year = new Date().getFullYear();
 
 export const LoginPage = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-    mode: "onBlur",
+  const [values, setValues] = useState({
+    email: "",
+    password: "",
   });
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  console.log(errors);
-
-  const { login } = useAuth();
-
-  const onSubmit = (data) => {
-    console.log(data);
-    login();
-    navigate("/articles", { replace: true });
+  const handleChange = (event) => {
+    const { value, name } = event.target;
+    setValues((prev) => ({ ...prev, [name]: value }));
   };
 
-  const [email, setEmail] = useState("");
-
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      await dispatch(loginThunk(values)).unwrap();
+      navigate("/articles", { replace: true });
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   return (
-    <Box
-      component="form"
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        "& > :not(style)": { m: 1, width: "25ch" },
-      }}
-      noValidate
-      autoComplete="off"
+    <form
+      action="#"
+      className="mt-5 mx-auto p-0"
+      style={{ width: "450px" }}
+      onSubmit={handleSubmit}
     >
-      <TextField
-        onChange={(event) => setEmail(event.target.value)}
-        value={email}
-        id="outlined-basic"
-        label="Email"
-        variant="outlined"
-        color="secondary"
-      />
-      <TextField
-        id="filled-basic"
-        label="Password"
-        variant="outlined"
-        color="secondary"
-      />
-    </Box>
+      <h1 className="h3 mb-3 fw-normal">Please Log In</h1>
+
+      <div className="form-floating my-4">
+        <input
+          id="email"
+          name="email"
+          type="email"
+          autoComplete="username"
+          value={values.email}
+          onChange={handleChange}
+          className="form-control"
+        />
+        <label htmlFor="email">Email address</label>
+      </div>
+
+      <div className="form-floating my-4">
+        <input
+          id="password"
+          name="password"
+          type="password"
+          autoComplete="current-password"
+          value={values.password}
+          onChange={handleChange}
+          className="form-control"
+        />
+        <label htmlFor="password">Password</label>
+      </div>
+
+      <Link to="/join" className="d-block my-4">
+        Dont have account?
+      </Link>
+
+      <button className="w-100 mt-2 btn btn-lg btn-primary" type="submit">
+        Log In
+      </button>
+      <p className="mt-5 mb-3 text-muted">© {year}</p>
+    </form>
   );
-
-  // return (
-  //   <form
-  //     className="form-signin d-flex align-items-center justify-content-center mt-5"
-  //     onSubmit={handleSubmit(onSubmit)}
-  //   >
-  //     <div className="d-block" style={{ width: 300, height: "max-content" }}>
-  //       <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
-
-  //       <div className="form-floating">
-  //         <input
-  //           {...register("email", {
-  //             required: { value: true, message: "Email is required field" },
-  //             minLength: {
-  //               value: 6,
-  //               message: "Email must be at least 6 characters",
-  //             },
-  //           })}
-  //           type="email"
-  //           className="form-control"
-  //           id="email"
-  //           placeholder="name@example.com"
-  //         />
-  //         {errors?.email && (
-  //           <p style={{ color: "red" }}>{errors.email.message}</p>
-  //         )}
-  //         <label htmlFor="email">Email address</label>
-  //       </div>
-  //       <div className="form-floating mt-4">
-  //         <input
-  //           {...register("password", {
-  //             required: { value: true, message: "Password is required field" },
-  //             minLength: {
-  //               value: 6,
-  //               message: "Password must be at least 6 characters",
-  //             },
-  //             pattern: {
-  //               value: /(?=.*[0-9])/,
-  //               message: "Password must have at least one digit",
-  //             },
-  //           })}
-  //           type="password"
-  //           className="form-control"
-  //           id="pass"
-  //           placeholder="Password"
-  //         />
-  //         {errors?.password && (
-  //           <p style={{ color: "red" }}>{errors.password.message}</p>
-  //         )}
-  //         <label htmlFor="pass">Password</label>
-  //       </div>
-
-  //       <button className="w-100 btn btn-lg btn-primary mt-4" type="submit">
-  //         Sign in
-  //       </button>
-
-  //       <p className="mt-5 mb-3 text-muted">© {year}</p>
-  //     </div>
-  //   </form>
-  // );
 };

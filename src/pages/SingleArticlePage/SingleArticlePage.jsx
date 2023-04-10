@@ -4,7 +4,7 @@ import { Link, Outlet, useLocation, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import { Loader } from "../../components/Loader";
-import { getSingelArticleService } from "../../services/articlesService";
+import { getSinglePostService } from "../../services/postsService";
 
 export const SinglearticlePage = () => {
   const { articleId } = useParams();
@@ -20,7 +20,7 @@ export const SinglearticlePage = () => {
   useEffect(() => {
     setIsLoading(true);
 
-    getSingelArticleService(articleId)
+    getSinglePostService(articleId)
       .then(setArticle)
       .catch(() => {
         toast.error("Something went wrong!");
@@ -37,7 +37,7 @@ export const SinglearticlePage = () => {
       <>
         <Link to={from ?? '/articles'} className="btn btn-primary my-3">Back</Link>
         <img
-          src={article.urlToImage}
+          src={article.preview_image}
           alt={article.title}
           className="img-fluid mb-4"
           style={{ maxHeight: "600px", width: "100%", objectFit: "cover" }}

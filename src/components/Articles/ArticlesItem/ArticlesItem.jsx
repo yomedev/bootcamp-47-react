@@ -1,26 +1,23 @@
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import { Link, useLocation } from "react-router-dom";
-import { useAuth } from "../../../context/AuthContext";
 
 import { cutString } from "../../../helpers/cut-string";
 import image from "./default_image.png";
-import { useDeleteArticleMutation } from "../../../redux/articlesRtk/articlesApi";
 
-// import { useDispatch } from "react-redux";
-// import { deleteArticleThunk } from "../../../redux/articles/articlesThunk";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteArticleThunk } from "../../../redux/articles/articlesThunk";
+import { fetchStatus } from "../../../constants/fetch-status";
 
 export const ArticlesItem = ({ article }) => {
-  const { isAuth } = useAuth();
+  const status = useSelector(state => state.auth.status)
   const location = useLocation();
 
-  const [deleteArticle] = useDeleteArticleMutation()
 
 
-  // const dispatch = useDispatch()
+  const dispatch = useDispatch()
 
   const handleDelete = () => {
-    deleteArticle(article.id)
-    // dispatch(deleteArticleThunk(article.id))
+    dispatch(deleteArticleThunk(article.id))
   }
 
   return (
@@ -29,7 +26,7 @@ export const ArticlesItem = ({ article }) => {
         <img
           height="250px"
           alt={article.title}
-          src={article.urlToImage || image}
+          src={article.preview_image || image}
           className="card-img-top"
           style={{ objectFit: "cover" }}
         />
@@ -42,18 +39,18 @@ export const ArticlesItem = ({ article }) => {
           <ul className="list-group list-group-flush mb-4">
             <li className="list-group-item">{article.author}</li>
             <li className="list-group-item">
-              Created: {formatDistanceToNow(new Date(article.publishedAt))}
+              Created: {formatDistanceToNow(new Date(article.created_at))}
             </li>
           </ul>
 
-          {isAuth && (
+          {status === fetchStatus.Success && (
             <div className="d-flex">
               <button type="button" className="btn btn-danger" onClick={handleDelete}>
                 Delete article
               </button>
 
               <Link
-                to={article.id}
+                to={`${article.id}`}
                 className="btn btn-primary ms-3"
                 state={{ from: location }}
               >

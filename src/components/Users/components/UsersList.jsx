@@ -1,7 +1,6 @@
 import { UsersItem } from "./UsersItem";
 import { NotFound } from "./NotFound";
 import { useSelector } from "react-redux";
-import { useState } from "react";
 import {
   selectFilteredUsers,
   selectUsersOpenToWorkTotal,
