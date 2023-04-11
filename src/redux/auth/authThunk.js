@@ -7,7 +7,7 @@ export const loginThunk = createAsyncThunk(
   async (body, { rejectWithValue }) => {
     try {
       const data = await loginUserService(body);
-      console.log(data);
+      // console.log(data);
       token.set(`${data.token_type} ${data.access_token}`);
       return data;
     } catch (error) {

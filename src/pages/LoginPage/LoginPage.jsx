@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { loginThunk } from "../../redux/auth/authThunk";
 import { toast } from "react-toastify";
 
@@ -9,12 +9,11 @@ const year = new Date().getFullYear();
 
 export const LoginPage = () => {
   const [values, setValues] = useState({
-    email: "",
-    password: "",
+    email: "testuser@gmail.com",
+    password: "qwerty123",
   });
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const handleChange = (event) => {
     const { value, name } = event.target;
@@ -25,7 +24,6 @@ export const LoginPage = () => {
     event.preventDefault();
     try {
       await dispatch(loginThunk(values)).unwrap();
-      navigate("/articles", { replace: true });
     } catch (error) {
       toast.error(error.message);
     }

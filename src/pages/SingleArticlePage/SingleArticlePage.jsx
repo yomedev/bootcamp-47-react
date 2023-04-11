@@ -1,20 +1,29 @@
 import { useEffect, useState } from "react";
-import { Link, Outlet, useLocation, useParams } from "react-router-dom";
+import {
+  Link,
+  Outlet,
+  useLocation,
+  useParams,
+} from "react-router-dom";
 
 import { toast } from "react-toastify";
 
 import { Loader } from "../../components/Loader";
 import { getSinglePostService } from "../../services/postsService";
+import { useSelector } from "react-redux";
+import { fetchStatus } from "../../constants/fetch-status";
 
 export const SinglearticlePage = () => {
   const { articleId } = useParams();
 
+  const status = useSelector((state) => state.auth.status);
+
   const [article, setArticle] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const location = useLocation()
+  const location = useLocation();
 
-  const from = location.state?.from
+  const from = location.state?.from;
   console.log(location);
 
   useEffect(() => {
@@ -28,6 +37,16 @@ export const SinglearticlePage = () => {
       .finally(() => setIsLoading(false));
   }, [articleId]);
 
+
+  const handleNavigate = () => {
+    if (status === fetchStatus.Success) {
+      toast.success('You successfully added comment!')
+      return
+      // navigate("newest", { state: location.state });
+    }
+    toast.error('You are not authorized!')
+  };
+
   if (isLoading) {
     return <Loader />;
   }
@@ -35,7 +54,9 @@ export const SinglearticlePage = () => {
   return (
     article && (
       <>
-        <Link to={from ?? '/articles'} className="btn btn-primary my-3">Back</Link>
+        <Link to={from ?? "/articles"} className="btn btn-primary my-3">
+          Back
+        </Link>
         <img
           src={article.preview_image}
           alt={article.title}
@@ -46,9 +67,9 @@ export const SinglearticlePage = () => {
 
         <div>{article.content}</div>
 
-        <Link to="newest" state={location.state} className="btn btn-primary my-3">
-          Show newest articles
-        </Link>
+        <button onClick={handleNavigate} className="btn btn-primary my-3">
+          Add comment
+        </button>
 
         <Outlet />
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { createUserService } from "../../services/usersService";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
@@ -21,7 +21,6 @@ export const RegisterPage = () => {
   const [values, setValues] = useState(initialState);
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const handleChange = (event) => {
     const { value, name } = event.target;
@@ -35,7 +34,6 @@ export const RegisterPage = () => {
       await dispatch(
         loginThunk(omit(values, "first_name", "last_name"))
       ).unwrap();
-      navigate("/articles", { replace: true });
     } catch (error) {
       toast.error(error.message);
     }

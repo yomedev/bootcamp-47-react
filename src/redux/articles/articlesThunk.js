@@ -4,9 +4,9 @@ import { createNewPostService, deletePostService, getPostsService } from "../../
 
 export const getArticlesThunk = createAsyncThunk(
   "articles/getArticles",
-  async (_, { rejectWithValue }) => {
+  async (params, { rejectWithValue }) => {
     try {
-      const data = await getPostsService();
+      const data = await getPostsService(params);
       return data;
     } catch (error) {
       toast.error(error.message);

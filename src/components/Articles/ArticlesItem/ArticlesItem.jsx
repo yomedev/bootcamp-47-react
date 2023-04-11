@@ -6,19 +6,17 @@ import image from "./default_image.png";
 
 import { useDispatch, useSelector } from "react-redux";
 import { deleteArticleThunk } from "../../../redux/articles/articlesThunk";
-import { fetchStatus } from "../../../constants/fetch-status";
 
 export const ArticlesItem = ({ article }) => {
-  const status = useSelector(state => state.auth.status)
   const location = useLocation();
 
+  const profile = useSelector((state) => state.profile.data);
 
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const handleDelete = () => {
-    dispatch(deleteArticleThunk(article.id))
-  }
+    dispatch(deleteArticleThunk(article.id));
+  };
 
   return (
     <div className="col-12 col-sm-6 col-lg-4 mb-4">
@@ -43,11 +41,17 @@ export const ArticlesItem = ({ article }) => {
             </li>
           </ul>
 
-          {status === fetchStatus.Success && (
+
             <div className="d-flex">
-              <button type="button" className="btn btn-danger" onClick={handleDelete}>
-                Delete article
-              </button>
+              {article.user_id === profile?.id && (
+                <button
+                  type="button"
+                  className="btn btn-danger"
+                  onClick={handleDelete}
+                >
+                  Delete article
+                </button>
+              )}
 
               <Link
                 to={`${article.id}`}
@@ -57,7 +61,6 @@ export const ArticlesItem = ({ article }) => {
                 Read article
               </Link>
             </div>
-          )}
         </div>
       </div>
     </div>

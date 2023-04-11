@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { authInitialState } from "./authInitialState";
 import { loginThunk } from "./authThunk";
 import { fetchStatus } from "../../constants/fetch-status";
+import { getProfileThunk } from "../profile/profileThunk";
 
 const authSlice = createSlice({
   name: "auth",
@@ -21,7 +22,8 @@ const authSlice = createSlice({
       })
       .addCase(loginThunk.rejected, (state) => {
         state.status = fetchStatus.Error;
-      });
+      })
+      .addCase(getProfileThunk.rejected, () => authInitialState);
   },
 });
 

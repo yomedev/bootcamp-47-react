@@ -16,6 +16,8 @@ import { MiddlewarePage } from "./pages/ExercisesPage/MiddlewarePage/MiddlewareP
 import { useDispatch, useSelector } from "react-redux";
 import { fetchStatus } from "./constants/fetch-status";
 import { getProfileThunk } from "./redux/profile/profileThunk";
+import { PublicRoute } from "./components/PublicRoute/PublicRoute";
+import { PrivateRoute } from "./components/PrivateRoute/PrivateRoute";
 const CounterPage = lazy(() => import("./pages/ExercisesPage/CounterPage"));
 const HomePage = lazy(() => import("./pages/HomePage"));
 const ArticlesListPage = lazy(() => import("./pages/ArticlesListPage"));
@@ -37,20 +39,24 @@ export const App = () => {
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
           <Route path="articles" element={<ArticlesListPage />} />
-          <Route path="new-article" element={<NewArticlePage />} />
+  
           <Route path="articles/:articleId" element={<SinglearticlePage />} />
-
-          <Route path="exercises" element={<ExercisesPage />}>
-            <Route index element={<Navigate to="counter" />} />
-            <Route path="timer" element={<TimerPage />} />
-            <Route path="counter" element={<CounterPage />} />
-            <Route path="users" element={<UsersPage />} />
-            <Route path="re-render" element={<RerenderPage />} />
-            <Route path="middleware" element={<MiddlewarePage />} />
+          <Route path="" element={<PrivateRoute />}>
+            <Route path="new-article" element={<NewArticlePage />} />
+            <Route path="exercises" element={<ExercisesPage />}>
+              <Route index element={<Navigate to="counter" />} />
+              <Route path="timer" element={<TimerPage />} />
+              <Route path="counter" element={<CounterPage />} />
+              <Route path="users" element={<UsersPage />} />
+              <Route path="re-render" element={<RerenderPage />} />
+              <Route path="middleware" element={<MiddlewarePage />} />
+            </Route>
           </Route>
 
-          <Route path="login" element={<LoginPage />} />
-          <Route path="register" element={<RegisterPage />} />
+          <Route path="" element={<PublicRoute />}>
+            <Route path="login" element={<LoginPage />} />
+            <Route path="register" element={<RegisterPage />} />
+          </Route>
 
           <Route path="*" element={<NotFoundPage />} />
         </Route>

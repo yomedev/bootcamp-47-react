@@ -34,7 +34,7 @@ export const NewArticlePage = () => {
     setIsLoading(true);
     createNewPostService(form)
       .then(post => {
-        navigate(`/posts/${post.id}`, { state: { isPostCreated: true } });
+        navigate(`/articles/${post.id}`);
         toast.success('You have successfully created a new post!');
       })
       .catch(() => {
